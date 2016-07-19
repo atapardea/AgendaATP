@@ -2,7 +2,7 @@
 package Backend;
 
 
-public class Persoana {
+public class Abonat {
     private String nume;
     private String prenume;
     
