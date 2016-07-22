@@ -5,8 +5,8 @@ import Exceptii.CNPInvalidException;
 
 public class Abonat {
 
-    private String nume;
-    private String prenume;
+    private String Nume;
+    private String Prenume;
     private long CNP;
     private long nrTel;
 
@@ -28,10 +28,54 @@ public class Abonat {
         if (Validari.validareCNP(CNP) == false) {
             throw new CNPInvalidException("CNP-ul este invalid");
         }
-        this.nume = nume;
-        this.prenume = prenume;
+        this.Nume = nume;
+        this.Prenume = prenume;
         this.CNP = CNP;
         this.nrTel = nrTel;
     }
 
+    // PUBLIC GETTERS 
+    
+    //<editor-fold defaultstate="collapsed" desc="comment">
+    public String getNume (){
+        return this.Nume;}
+    
+    public String getPrenume (){
+        return this.Prenume;}
+    
+    public long getCNP (){
+        return this.CNP;}
+    
+    public long getnrTel (){
+        return this.nrTel;}
+//</editor-fold>
+    
+    // PUBLIC SETTERS
+
+    //<editor-fold defaultstate="collapsed" desc="comment">
+    public void setNume(String Nume) {
+        this.Nume = Nume;
+    }
+    
+    public void setPrenume(String Prenume) {
+        this.Prenume = Prenume;
+    }
+    
+    public void setCNP(long CNP) {
+        this.CNP = CNP; }
+    
+    public void setnrTel(long nrTel){
+        this.nrTel=nrTel;}
+//</editor-fold>
+   
+
+
+
 }
+
+    
+    
+    
+    
+
+
