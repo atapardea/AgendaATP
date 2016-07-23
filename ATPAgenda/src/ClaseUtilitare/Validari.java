@@ -17,10 +17,13 @@ public class Validari {
     
     public static boolean validareCNP(long CNP){
         
+        //metoda de validare a CNP-ului
+        
         zi=Long.toString(CNP).substring(5, 7);
         luna=Long.toString(CNP).substring(3, 5);
         an=Long.toString(CNP).substring(1, 3);
         stringDataNasterii=(zi+"-"+luna+"-"+an);
+        
         
         
         if ("1".equals(Long.toString(CNP).substring(0, 1)) || "2".equals(Long.toString(CNP).substring(0, 1)) ) {
@@ -33,7 +36,9 @@ public class Validari {
    
     
     public static boolean isDateValid(String date){
-
+            
+        //metoda pentru a verifica daca data dintr-un CNP este valida
+        
         try {
             DateFormat df = new SimpleDateFormat(DATE_FORMAT);
             df.setLenient(false);
