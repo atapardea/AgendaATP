@@ -22,10 +22,7 @@ import javax.swing.JTextField;
  */
 public class MainFrame extends JFrame {
 
-    private JLabel NumeLabel;
-    private JLabel PrenumeLabel;
-    private JLabel CNPLabel;
-    private JLabel NrTelefonLabel;
+    
 
     private JButton ButonAdauga;
     private JButton ButonEditeaza;
@@ -37,9 +34,9 @@ public class MainFrame extends JFrame {
     private JTextField InputCNP;
     private JTextField InputNrTelefon;
     
-    private TextPannel textpannel;
+    private TextPanel textpanel;
     private ToolBar toolbar;
-            
+    private FormPanel formpanel;
 
     public MainFrame() {
         super("ATP Agenda");
@@ -49,10 +46,7 @@ public class MainFrame extends JFrame {
         this.setVisible(true);
         this.setSize(800, 600);
 
-        NumeLabel = new JLabel("Nume");
-        PrenumeLabel = new JLabel("Prenume");
-        CNPLabel = new JLabel("CNP");
-        NrTelefonLabel = new JLabel("NrTelefon");
+        
 
         InputNume=new JTextField();
         InputPrenume=new JTextField();
@@ -64,8 +58,20 @@ public class MainFrame extends JFrame {
         ButonCauta = new JButton("Cauta");
         ButonSterge = new JButton("Sterge");
         
-        textpannel=new TextPannel();
+        textpanel=new TextPanel();
         toolbar=new ToolBar();
+        formpanel=new FormPanel();
+        
+       this.add(formpanel,BorderLayout.WEST);
+       this.add(textpanel,BorderLayout.CENTER);
+       this.add(toolbar,BorderLayout.NORTH);
+        
+        toolbar.setStringListener(new StringListener() {
+            
+            public void textEmitted(String text) {
+                textpanel.append(text);
+            }
+        });
         
         
         ButonAdauga.addActionListener(new ActionListener() {
@@ -96,29 +102,29 @@ public class MainFrame extends JFrame {
                 InputPrenume.setText("Nume");
                 InputCNP.setText("Nume");
                 InputNrTelefon.setText("Nume");
-                
-                textpannel.append("Hello");
-                
+              
             }
         });
 
-       this.add(NumeLabel,BorderLayout.CENTER);
-       this.add(PrenumeLabel,BorderLayout.CENTER);
-       this.add(CNPLabel,BorderLayout.CENTER);
-       this.add(NrTelefonLabel,BorderLayout.CENTER);
+       //this.add(NumeLabel,BorderLayout.CENTER);
+       //this.add(PrenumeLabel,BorderLayout.CENTER);
+       //this.add(CNPLabel,BorderLayout.CENTER);
+       //this.add(NrTelefonLabel,BorderLayout.CENTER);
     
-       this.add(ButonAdauga,BorderLayout.EAST);
-       this.add(ButonCauta,BorderLayout.EAST);
-       this.add(ButonEditeaza,BorderLayout.EAST);
-       this.add(ButonSterge,BorderLayout.EAST);
+      this.add(ButonAdauga,BorderLayout.EAST);
+      // this.add(ButonCauta,BorderLayout.EAST);
+       //this.add(ButonEditeaza,BorderLayout.EAST);
+      // this.add(ButonSterge,BorderLayout.EAST);
        
        this.add(InputNume,BorderLayout.SOUTH);
-       this.add(InputPrenume,BorderLayout.SOUTH);
-       this.add(InputCNP,BorderLayout.SOUTH);
-       this.add(InputNrTelefon,BorderLayout.SOUTH);
+     //  this.add(InputPrenume,BorderLayout.SOUTH);
+     //  this.add(InputCNP,BorderLayout.SOUTH);
+     //  this.add(InputNrTelefon,BorderLayout.SOUTH);
        
-       this.add(textpannel,BorderLayout.CENTER);
-       this.add(toolbar,BorderLayout.NORTH);
+       
+       
+       
+       
     }
     
 

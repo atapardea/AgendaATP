@@ -10,10 +10,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
     
 
-public class TextPannel extends JTextArea {
+public class TextPanel extends JTextArea {
     private JTextArea textarea;
     
-    public TextPannel(){
+    public TextPanel(){
         
         this.setLayout(new BorderLayout());
         this.add(new JScrollPane(textarea), BorderLayout.NORTH);
