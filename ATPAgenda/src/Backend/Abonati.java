@@ -2,15 +2,16 @@ package Backend;
 
 import ClaseUtilitare.Validari;
 import Exceptii.CNPInvalidException;
+import java.io.Serializable;
 
-public class Abonat {
+public class Abonati implements Serializable {
 
     private String Nume;
     private String Prenume;
     private long CNP;
     private long nrTel;
 
-    public Abonat(String nume, String prenume, long CNP, long nrTel) {
+    public Abonati(String nume, String prenume, String CNPstring, String nrTelstring) {
 
 //<editor-fold defaultstate="collapsed" desc="Verificari string nume si prenume">
 // verifica numele sa nu fie null
@@ -33,16 +34,17 @@ public class Abonat {
 //</editor-fold>
 
 //verifica daca CNP-ul are 13 cifre
-        if (Long.toString(CNP).length() != 13) {
+        if (CNPstring.length() != 13) {
+            
             throw new IllegalArgumentException("CNP-ul trebuie sa contina 13 cifre");
         }
-        if (Validari.validareCNP(CNP) == false) {
+        if (Validari.validareCNP(Long.parseLong(CNPstring)) == false) {
             throw new CNPInvalidException("CNP-ul este invalid");
         }
         this.Nume = nume;
         this.Prenume = prenume;
-        this.CNP = CNP;
-        this.nrTel = nrTel;
+        this.CNP = Long.parseLong(CNPstring);
+        this.nrTel = Long.parseLong(nrTelstring);
     }
 
     // PUBLIC GETTERS 

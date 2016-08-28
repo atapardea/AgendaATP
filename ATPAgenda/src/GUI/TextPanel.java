@@ -8,6 +8,7 @@ package GUI;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.table.TableModel;
     
 
 public class TextPanel extends JTextArea {
@@ -15,12 +16,15 @@ public class TextPanel extends JTextArea {
     
     public TextPanel(){
         
+        textarea=new JTextArea();
         this.setLayout(new BorderLayout());
-        this.add(new JScrollPane(textarea), BorderLayout.NORTH);
+        this.add(new JScrollPane(textarea), BorderLayout.CENTER);
     
     }
     public void appendText(String text){
         textarea.append(text);
     
     }
+    
+   
 }
