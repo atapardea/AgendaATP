@@ -15,20 +15,45 @@ import java.util.logging.Logger;
  * @author atapardea
  */
 public class TestDatabase {
-    public static void main(String[] args0) throws SQLException{
-       DBHandler test=new DBHandler();
-       ResultSet rs;
-       
-        try {
-            rs = test.displayUsers();
-            while(rs.next()){
-           System.err.println(rs.getString(0));
-       }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TestDatabase.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       
-       
-       
-    }
+//   
+
+//    public static void main(String[] args) {
+//        System.err.println("Running database test");
+//
+//        DBHandler db = new DBHandler();
+//        try {
+//            db.connect();
+//            
+//
+//        } catch (ClassNotFoundException ex) {
+//            ex.printStackTrace();
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        
+//        db.ListaAdaugaPersoana(new Abonati("Joe", "Smith", "1840319160137", "0724374455"));
+//        
+//        try {
+//            
+//            db.Save();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(TestDatabase.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        try {
+//            db.load();
+//        } catch (SQLException ex) {
+//            
+//        }
+//        
+//        try {
+//            db.disconnect();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(TestDatabase.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        
+//    }
+
 }

@@ -11,6 +11,7 @@ import GUI.AbonatiTableModel;
 import GUI.FormEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Controller {
@@ -49,4 +50,18 @@ public class Controller {
         db.IncarcaDinFisier(file);
     }
     
+    public void saveToDB() throws SQLException{
+    db.Save();}
+    
+    public void disconnectDB() throws SQLException{
+    db.disconnect();
+    }
+    
+    public void connectToDB() throws ClassNotFoundException, SQLException {
+    db.connect();
+    }
+    
+    public void loadFromDB () throws SQLException {
+    db.load();
+    }
 }

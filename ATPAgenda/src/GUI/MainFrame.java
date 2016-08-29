@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.stage.FileChooser;
@@ -63,23 +64,49 @@ public class MainFrame extends JFrame {
         controller = new Controller();
         tablepanel = new TablePanel();
         tablepanel.setData(controller.getAbonati());
-        
-        
+
         ///
-        tablepanel.setAbonatiTableListener(new AbonatiTableListener(){
-            public void rowDeleted(int row){
+        tablepanel.setAbonatiTableListener(new AbonatiTableListener() {
+            public void rowDeleted(int row) {
                 controller.stergeAbonat(row);
             }
         });
-        
+
+        toolbar.setToolBarListener(new ToolBarListener() {
+
+            @Override
+            public void saveEventOccured() {
+                try {
+                    controller.connectToDB();
+                    controller.saveToDB();
+                } catch (ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Nu se poate gasi clasa SQL");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Nu se poate face conexiunea la baza de date");
+                }
+            }
+
+            @Override
+            public void refreshEventOccured() {
+                try {
+                    controller.connectToDB();
+                    controller.loadFromDB();
+                    
+                } catch (ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Nu se poate gasi clasa SQL");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Nu se poate face conexiunea la baza de date");
+                }
+                tablepanel.refresh();
+            }
+        });
+
         setJMenuBar(createMenuBar());
 
         this.add(formpanel, BorderLayout.WEST);
         this.add(tablepanel, BorderLayout.CENTER);
         this.add(toolbar, BorderLayout.NORTH);
 
-        
-        
         formpanel.setFormListener(new FormListener() {
             public void formEventOccured(FormEvent e) {
 
@@ -206,5 +233,5 @@ public class MainFrame extends JFrame {
 
         return menubar;
     }
-        
+
 }

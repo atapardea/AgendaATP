@@ -29,52 +29,115 @@ public class DBHandler {
 
     private LinkedList<Abonati> ListaAbonati;
 
-    
-    private static Connection con;
-    private static boolean hasData=false;
-    
-    
-    public ResultSet displayUsers() throws SQLException, ClassNotFoundException{
-        if (con==null){
-           getConnection();
-        
-        }
-        Statement state = con.createStatement();
-        ResultSet res=state.executeQuery("SELECT * from Abonati");
-        return res;
-    }
-        
-   private void getConnection() throws ClassNotFoundException, SQLException{
-       Class.forName("org.sqlite.JDBC");
-       con=DriverManager.getConnection("jdbc:sqlite:Abonati.db");
-       initialize();
-   }
-    private void initialize() throws SQLException{
-        if (!hasData){
-            hasData =true;
-            
-            Statement state=con.createStatement();
-            ResultSet res=state.executeQuery("SELECT Name from Abonati");
-            if (!res.next()){
-                System.err.println("Building the table");
-                
-                Statement state2=con.createStatement();
-                state2.execute("CREATE TABLE Abonati(CNP integer)");
-            
-            PreparedStatement prep=con.prepareStatement("INSERT INTO Abonati values(1840319160128)");
-            prep.execute();
+    public Connection con;
+
+    /// metoda prin care se face conexiunea la db, si se creeaza 
+    /////atat db cat si Tabela Abonati daca nu exista 
+    public void connect() throws ClassNotFoundException, SQLException {
+        Class.forName("org.sqlite.JDBC");
+        String url = "jdbc:sqlite:Abonati.db";
+        Statement stmt = null;
+
+        try {
+
+            if (con != null) {
+                return;
             }
+
+            con = DriverManager.getConnection(url);
+            if (con != null) {
+                DatabaseMetaData meta = con.getMetaData();
+
+                stmt = con.createStatement();
+                String sql = "CREATE TABLE IF NOT EXISTS Abonati "
+                        + "(NUME           TEXT    NOT NULL, "
+                        + "PRENUME           TEXT    NOT NULL, "
+                        + "CNP BIGINT PRIMARY KEY     NOT NULL,"
+                        + " NRTELEFON         TEXT    NOT NULL)";
+
+                stmt.executeUpdate(sql);
+                stmt.close();
+
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
-    }public void addUser(String CNP) throws ClassNotFoundException, SQLException{
-        if (con==null){getConnection();}
-    
-        PreparedStatement prep = con.prepareStatement("INSERT INTO Abonati values(1840319160122)");
-        prep.execute();
     }
-    
-    
-    
-    
+
+    /////metoda de deconectare de la db
+    public void disconnect() throws SQLException {
+        if (con != null) {
+            con.close();
+        }
+    }
+
+    //// metoda care salveaza abonati din lista existenta in baza de date
+    public void Save() throws SQLException {
+
+        Statement statement = con.createStatement();
+
+        // itereaza lista existenta de abonati dupa cheia primara - CNP si verifica daca exista in db
+        for (Abonati abonati : ListaAbonati) {
+            String sql = "SELECT COUNT(*) AS COUNT FROM Abonati where CNP=" + abonati.getCNP();
+
+            String Nume = abonati.getNume();
+            String Prenume = abonati.getPrenume();
+            Long CNP = abonati.getCNP();
+            Long NrTelefon = abonati.getnrTel();
+
+            String insertQuery = "INSERT INTO Abonati (NUME,PRENUME,CNP,NRTELEFON) values(\"" + Nume + "\",\""
+                    + Prenume + "\","
+                    + CNP + ","
+                    + NrTelefon + ")";
+
+            String updateQuery = "UPDATE Abonati SET NUME=\"" + Nume + "\",PRENUME=\""
+                    + Prenume + "\",CNP="
+                    + CNP + ",NRTELEFON="
+                    + NrTelefon + " WHERE CNP="
+                    + abonati.getCNP();
+
+            
+
+            ResultSet result = statement.executeQuery(sql);
+
+            result.next();
+            int count = result.getInt(1);
+
+            if (count == 0) {
+                System.err.println("Inserting person with ID" + abonati.getCNP());
+                statement.executeUpdate(insertQuery);
+            }
+            if (count == 1) {
+                statement.executeUpdate(updateQuery);
+
+            }
+            
+        }
+        statement.close();
+    }
+
+    public void load() throws SQLException {
+
+        ListaAbonati.clear();
+        String sql = "SELECT NUME, PRENUME, CNP, NRTELEFON from Abonati order by NUME";
+
+        Statement selectStatement = con.createStatement();
+
+        ResultSet result = selectStatement.executeQuery(sql);
+        while (result.next()) {
+            String nume=result.getString("NUME");
+            String prenume=result.getString("PRENUME");
+            long cnp=result.getLong("CNP");
+            long nrtel=result.getLong("NRTELEFON");
+             
+            ListaAbonati.add(new Abonati(nume, prenume, Long.toString(cnp), Long.toString(cnp)));
+        }
+
+        result.close();
+        selectStatement.close();
+
+    }
+
     /// constructor////
     public DBHandler() {
         ListaAbonati = new LinkedList<Abonati>();
@@ -90,51 +153,31 @@ public class DBHandler {
         //// scris in asa fel incat alta clasa sa nu poata modifica Lista de Abonati curent existenta////
         return Collections.unmodifiableList(ListaAbonati);
     }
-    
-    public void stergeAbonat(int index){
+
+    public void stergeAbonat(int index) {
         ListaAbonati.remove(index);
     }
 
-    //// metode pentru manipulare Baza de date/////
-    public void Conectare() {
-    }
-    
-    public void Deconectare(){
-    
-    }
-    
-    public void AdaugaAbonat() {
-    }
-
-    public void EditeazaAbonat() {
-    }
-
-    public void StergeAbonat() {
-    }
-
-    
     ////Metode de salvat / incarcat date in fisiere ////
-    
     public void SalveazaInFisier(File file) throws FileNotFoundException, IOException {
         FileOutputStream fos = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
-        
-        Abonati[] abonati= ListaAbonati.toArray(new Abonati[ListaAbonati.size()]);
-        
+
+        Abonati[] abonati = ListaAbonati.toArray(new Abonati[ListaAbonati.size()]);
+
         oos.writeObject(abonati);
         oos.close();
     }
-    
-    public void IncarcaDinFisier(File file) throws FileNotFoundException, IOException{
-        
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois=new ObjectInputStream(fis);
-          
-            
-            try {  
-            Abonati[] abonati=(Abonati[]) ois.readObject();
+
+    public void IncarcaDinFisier(File file) throws FileNotFoundException, IOException {
+
+        FileInputStream fis = new FileInputStream(file);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+
+        try {
+            Abonati[] abonati = (Abonati[]) ois.readObject();
             ListaAbonati.addAll(Arrays.asList(abonati));
-            
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
