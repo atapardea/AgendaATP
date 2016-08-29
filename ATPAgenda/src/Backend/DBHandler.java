@@ -14,9 +14,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.*;
 
 /**
  *
@@ -24,11 +27,57 @@ import java.util.logging.Logger;
  */
 public class DBHandler {
 
-    private ArrayList<Abonati> ListaAbonati;
+    private LinkedList<Abonati> ListaAbonati;
 
+    
+    private static Connection con;
+    private static boolean hasData=false;
+    
+    
+    public ResultSet displayUsers() throws SQLException, ClassNotFoundException{
+        if (con==null){
+           getConnection();
+        
+        }
+        Statement state = con.createStatement();
+        ResultSet res=state.executeQuery("SELECT * from Abonati");
+        return res;
+    }
+        
+   private void getConnection() throws ClassNotFoundException, SQLException{
+       Class.forName("org.sqlite.JDBC");
+       con=DriverManager.getConnection("jdbc:sqlite:Abonati.db");
+       initialize();
+   }
+    private void initialize() throws SQLException{
+        if (!hasData){
+            hasData =true;
+            
+            Statement state=con.createStatement();
+            ResultSet res=state.executeQuery("SELECT Name from Abonati");
+            if (!res.next()){
+                System.err.println("Building the table");
+                
+                Statement state2=con.createStatement();
+                state2.execute("CREATE TABLE Abonati(CNP integer)");
+            
+            PreparedStatement prep=con.prepareStatement("INSERT INTO Abonati values(1840319160128)");
+            prep.execute();
+            }
+        }
+    }public void addUser(String CNP) throws ClassNotFoundException, SQLException{
+        if (con==null){getConnection();}
+    
+        PreparedStatement prep = con.prepareStatement("INSERT INTO Abonati values(1840319160122)");
+        prep.execute();
+    }
+    
+    
+    
+    
     /// constructor////
     public DBHandler() {
-        ListaAbonati = new ArrayList<Abonati>();
+        ListaAbonati = new LinkedList<Abonati>();
 
     }
 
@@ -38,13 +87,22 @@ public class DBHandler {
     }
 
     public List<Abonati> getListaAbonati() {
-        return ListaAbonati;
+        //// scris in asa fel incat alta clasa sa nu poata modifica Lista de Abonati curent existenta////
+        return Collections.unmodifiableList(ListaAbonati);
+    }
+    
+    public void stergeAbonat(int index){
+        ListaAbonati.remove(index);
     }
 
     //// metode pentru manipulare Baza de date/////
     public void Conectare() {
     }
-
+    
+    public void Deconectare(){
+    
+    }
+    
     public void AdaugaAbonat() {
     }
 

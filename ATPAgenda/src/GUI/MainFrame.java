@@ -63,12 +63,23 @@ public class MainFrame extends JFrame {
         controller = new Controller();
         tablepanel = new TablePanel();
         tablepanel.setData(controller.getAbonati());
+        
+        
+        ///
+        tablepanel.setAbonatiTableListener(new AbonatiTableListener(){
+            public void rowDeleted(int row){
+                controller.stergeAbonat(row);
+            }
+        });
+        
         setJMenuBar(createMenuBar());
 
         this.add(formpanel, BorderLayout.WEST);
         this.add(tablepanel, BorderLayout.CENTER);
         this.add(toolbar, BorderLayout.NORTH);
 
+        
+        
         formpanel.setFormListener(new FormListener() {
             public void formEventOccured(FormEvent e) {
 
@@ -134,6 +145,7 @@ public class MainFrame extends JFrame {
         savemenu.setMnemonic(KeyEvent.VK_S);
         iesiremenu.setMnemonic(KeyEvent.VK_E);
         iesiremenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+        openmenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 
         abonatimenu.setMnemonic(KeyEvent.VK_A);
         adaugamenu.setMnemonic(KeyEvent.VK_A);
@@ -194,5 +206,5 @@ public class MainFrame extends JFrame {
 
         return menubar;
     }
-
+        
 }

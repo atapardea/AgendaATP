@@ -17,10 +17,12 @@ public class Controller {
     
     DBHandler db = new DBHandler();
     
+    /// getter care intoarce lista de abonati curenta///
     public List<Abonati> getAbonati() {
         return db.getListaAbonati();
     }
     
+    /// metoda pentru adaugare abonat//// 
     public void adaugaAbonat(FormEvent e) {
         
         String nume = e.getNume();
@@ -34,6 +36,11 @@ public class Controller {
         db.ListaAdaugaPersoana(abonat);
     }
 
+    
+    public void stergeAbonat(int index){
+    db.stergeAbonat(index);
+    }
+    
     public void CtrlSalveazaInFisier(File file) throws IOException {
         db.SalveazaInFisier(file);
     }

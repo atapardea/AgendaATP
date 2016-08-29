@@ -52,17 +52,17 @@ public class FormPanel extends JPanel {
         ButonAdauga.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("inainte de geturi ");
+                
                String Nume = NumeField.getText();
                String Prenume=PrenumeField.getText();
                String CNP=CNPField.getText();
                String NrTelefon=NrTelefonField.getText();
                
                FormEvent ev=new FormEvent(this, Nume, Prenume, CNP, NrTelefon);
-                System.out.println("Form event apelat");
+              
                 
                if (formlistener != null){
-                   System.out.println("apelare formlisyener in formpanel");
+                   
                formlistener.formEventOccured(ev);
                
                //// curatare fielduri dupa apasare OK////
@@ -155,4 +155,23 @@ public class FormPanel extends JPanel {
     public void setFormListener(FormListener listener){
     this.formlistener=listener;
     }
+
+    //// setteri de labeluri ////
+    public void setTextNumeField(String s) {
+        this.NumeField.setText(s);
+    }
+    
+    public void setTextPrenumeField(String s) {
+        this.PrenumeField.setText(s);
+    }
+    
+    public void setTextCNPField(String s) {
+        this.CNPField.setText(s);
+    }
+
+    public void setTextNrTelefonField(String s) {
+        this.NrTelefonField.setText(s);
+    }
+    
+    
 }
