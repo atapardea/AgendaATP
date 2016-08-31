@@ -64,4 +64,8 @@ public class Controller {
     public void loadFromDB () throws SQLException {
     db.load();
     }
+    
+    public void sort(){
+    db.sorteazaLista();
+    }
 }

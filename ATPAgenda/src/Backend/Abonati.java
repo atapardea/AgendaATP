@@ -4,14 +4,14 @@ import ClaseUtilitare.Validari;
 import Exceptii.CNPInvalidException;
 import java.io.Serializable;
 
-public class Abonati implements Serializable {
+public class Abonati implements Serializable,Comparable<Abonati> {
 
     private String Nume;
     private String Prenume;
     private long CNP;
     private long nrTel;
 
-    public Abonati(String nume, String prenume, String CNPstring, String nrTelstring) {
+    public Abonati (String nume, String prenume, String CNPstring, String nrTelstring) {
 
 //<editor-fold defaultstate="collapsed" desc="Verificari string nume si prenume">
 // verifica numele sa nu fie null
@@ -111,5 +111,10 @@ public class Abonati implements Serializable {
         this.nrTel = nrTel;
     }
 //</editor-fold>
+
+    @Override
+    public int compareTo(Abonati o) {
+      return this.Nume.compareTo(o.Nume);
+    }
 
 }

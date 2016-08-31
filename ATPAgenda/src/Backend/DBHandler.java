@@ -130,7 +130,7 @@ public class DBHandler {
             long cnp=result.getLong("CNP");
             long nrtel=result.getLong("NRTELEFON");
              
-            ListaAbonati.add(new Abonati(nume, prenume, Long.toString(cnp), Long.toString(cnp)));
+            ListaAbonati.add(new Abonati(nume, prenume, Long.toString(cnp), Long.toString(nrtel)));
         }
 
         result.close();
@@ -183,4 +183,10 @@ public class DBHandler {
         }
         ois.close();
     }
+    
+    public void sorteazaLista(){
+        Collections.sort(ListaAbonati);
+        }
 }
+
+

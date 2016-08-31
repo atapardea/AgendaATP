@@ -8,6 +8,7 @@ package GUI;
 import Controller.Controller;
 import com.sun.corba.se.impl.ior.NewObjectKeyTemplateBase;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.TextField;
@@ -18,7 +19,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javafx.stage.FileChooser;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -27,6 +30,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
@@ -40,12 +44,26 @@ public class MainFrame extends JFrame {
     private JButton ButonCauta;
     private JButton ButonSterge;
 
+    private JPanel Cards;
+    private JPanel cardAdauga;
+    private JPanel cardAbout;
+
+    private JPanel cardCauta;
+
     private TextPanel textpanel;
     private ToolBar toolbar;
     private FormPanel formpanel;
     private JFileChooser jfilechooser;
     private Controller controller;
     private TablePanel tablepanel;
+    private InregistrarePanel cardInregistrare;
+
+    public MainFrame(String cod) {
+        if (cod == null) {
+        } else {
+            new MainFrame();
+        }
+    }
 
     public MainFrame() {
         super("ATP Agenda");
@@ -64,6 +82,8 @@ public class MainFrame extends JFrame {
         controller = new Controller();
         tablepanel = new TablePanel();
         tablepanel.setData(controller.getAbonati());
+
+        Cards = new JPanel(new CardLayout());
 
         ///
         tablepanel.setAbonatiTableListener(new AbonatiTableListener() {
@@ -91,7 +111,7 @@ public class MainFrame extends JFrame {
                 try {
                     controller.connectToDB();
                     controller.loadFromDB();
-                    
+
                 } catch (ClassNotFoundException ex) {
                     JOptionPane.showMessageDialog(MainFrame.this, "Nu se poate gasi clasa SQL");
                 } catch (SQLException ex) {
@@ -101,11 +121,22 @@ public class MainFrame extends JFrame {
             }
         });
 
-        setJMenuBar(createMenuBar());
+        this.add(Cards, BorderLayout.WEST);
 
-        this.add(formpanel, BorderLayout.WEST);
+        //this.add(formpanel, BorderLayout.WEST);
         this.add(tablepanel, BorderLayout.CENTER);
         this.add(toolbar, BorderLayout.NORTH);
+
+        cardAdauga = new JPanel(new BorderLayout());
+        cardAbout = new JPanel();
+        cardInregistrare = new InregistrarePanel();
+
+        Cards.add(cardAdauga);
+        Cards.add(cardAbout);
+        Cards.add(cardInregistrare);
+
+        cardAdauga.add(formpanel, BorderLayout.CENTER);
+        cardAdauga.setVisible(true);
 
         formpanel.setFormListener(new FormListener() {
             public void formEventOccured(FormEvent e) {
@@ -121,6 +152,8 @@ public class MainFrame extends JFrame {
 
             }
         });
+
+        setJMenuBar(createMenuBar());
 
     }
 
@@ -230,6 +263,40 @@ public class MainFrame extends JFrame {
                 }
             }
         });
+
+        /// meniul About
+        aboutmenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardAdauga.setVisible(false);
+                cardAbout.setVisible(true);
+                cardInregistrare.setVisible(false);
+            }
+        });
+
+        /// meniul adauga
+        adaugamenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardAdauga.setVisible(true);
+                cardAbout.setVisible(false);
+                cardInregistrare.setVisible(false);
+
+            }
+        });
+
+        ////// Inregistrare menu////
+        inregistraremenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardAdauga.setVisible(false);
+                cardAbout.setVisible(false);
+                cardInregistrare.setVisible(true);
+            }
+        });
+
+        
+       
 
         return menubar;
     }

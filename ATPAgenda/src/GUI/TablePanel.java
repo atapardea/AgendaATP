@@ -20,6 +20,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
 public class TablePanel extends JPanel {
@@ -81,6 +83,7 @@ public class TablePanel extends JPanel {
             }
         });
 
+        
         setLayout(new BorderLayout());
         add(new JScrollPane(table), BorderLayout.CENTER);
     }
